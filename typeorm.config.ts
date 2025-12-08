@@ -1,0 +1,40 @@
+import { DataSource } from 'typeorm';
+import { config } from 'dotenv';
+//import path from 'path';
+
+import { Role } from 'src/modules/role/domain/entities/role.entity';
+import { RolePermission } from 'src/modules/role/domain/entities/role-permission.entity';
+import { Permission } from 'src/modules/permissions/domain/entities/permission.entity';
+import { VerificationToken } from 'src/modules/verification/domain/entities/verification-token.entity';
+import { User } from 'src/modules/users/domain/entities/user.entity';
+import { UserRole } from 'src/modules/users/domain/entities/user-role';
+import { NotificationType } from 'src/modules/notification/domain/entities/notification-type.entity';
+import { NotificationTemplate } from 'src/modules/notification/domain/entities/notification-template.entity';
+import { RefreshToken } from 'src/modules/auth/domain/entities/refresh-token.entity';
+import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
+
+config();
+
+const dataSource = new DataSource({
+  type: 'postgres',
+  url: process.env.SUPABASE_DB_URL,
+  ssl: { rejectUnauthorized: false },
+  synchronize: false,
+  logging: true,
+  entities: [
+    Role,
+    Permission,
+    RolePermission,
+    Organization,
+    User,
+    VerificationToken,
+    UserRole,
+    NotificationType,
+    NotificationTemplate,
+    RefreshToken,
+  ],
+  migrations: ['src/database/migrations/*.ts'],
+  //migrations: [migrationsPath],
+});
+
+export default dataSource;
