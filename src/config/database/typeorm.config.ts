@@ -15,6 +15,12 @@ export const createTypeOrmConfig = (
   return {
     type: 'postgres',
     url: config.get<string>('database.url'),
+
+    extra: {
+      max: 1,
+      ssl: config.get('database.ssl') ? { rejectUnauthorized: false } : false,
+      connectionTimeoutMillis: 5000,
+    },
     ssl: config.get('database.ssl'),
     autoLoadEntities: true,
 
