@@ -1,8 +1,8 @@
 {
-  "version": 2,
+  "version": 3,
   "functions": {
     "api/serverless.mjs": {
-      "runtime": "nodejs22.x"
+      "runtime": "nodejs20.x"
     }
   }
 }
