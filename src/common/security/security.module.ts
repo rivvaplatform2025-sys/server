@@ -1,11 +1,12 @@
 import { Module, Global } from '@nestjs/common';
 import { HelmetModule } from './helmet.module';
-import { RateLimitFactory } from './rate-limit.factory';
+//import { RateLimitFactory } from './rate-limit.factory';
 
 @Global()
 @Module({
   imports: [HelmetModule],
-  providers: [RateLimitFactory],
-  exports: [HelmetModule, RateLimitFactory],
+  exports: [HelmetModule],
+  // providers: [RateLimitFactory],
+  // exports: [HelmetModule, RateLimitFactory],
 })
 export class SecurityModule {}

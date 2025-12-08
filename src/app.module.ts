@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import databaseConfig from './config/database/database.config';
 import { createTypeOrmConfig } from './config/database';
-//import { DataSource } from 'typeorm';
-// import { AuthService } from './modules/auth/services/auth.service';
-// import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
-// //import { DataSource } from 'typeorm';
-// import { AuthController } from './modules/auth/controllers/auth.controller';
+import { Role } from './modules/role/domain/entities/role.entity';
+import { RolePermission } from './modules/role/domain/entities/role-permission.entity';
+import { User } from './modules/users/domain/entities/user.entity';
+import { VerificationToken } from './modules/verification/domain/entities/verification-token.entity';
+import { RefreshToken } from './modules/auth/domain/entities/refresh-token.entity';
+import { Organization } from './modules/organization/domain/entities/organization.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,29 @@ import { createTypeOrmConfig } from './config/database';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => createTypeOrmConfig(config),
+      useFactory: (config: ConfigService) => {
+        const baseConfig = createTypeOrmConfig(config);
+
+        return {
+          ...baseConfig,
+          synchronize: false,
+          autoLoadEntities: false,
+
+          entities: [
+            User,
+            VerificationToken,
+            RefreshToken,
+            Organization,
+            Role,
+            RolePermission,
+          ],
+
+          extra: {
+            max: 5,
+            connectionTimeoutMillis: 5000,
+          },
+        };
+      },
     }),
     AuthModule,
   ],

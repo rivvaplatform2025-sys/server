@@ -10,6 +10,11 @@ import { SwaggerConfig } from './shared/swagger/swagger.options';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
+
+  if (process.env.VERCEL === '1') {
+    return;
+  }
+
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   // Prefix and versioning
@@ -57,11 +62,9 @@ async function bootstrap() {
     SwaggerConfig.setup(app);
   }
 
-  if (process.env.VERCEL !== '1') {
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-    await app.listen(port);
-    logger.log(`🚀 Application running on http://localhost:${port}/api/v1`);
-  }
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  await app.listen(port);
+  logger.log(`🚀 Application running on http://localhost:${port}/api/v1`);
 }
 bootstrap().catch((err) => {
   console.error(err);
