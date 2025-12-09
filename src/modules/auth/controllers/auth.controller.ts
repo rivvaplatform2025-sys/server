@@ -20,7 +20,7 @@ import {
 // import { CurrentUser } from '../decorators/current-user.decorator';
 
 @ApiTags('Authentication')
-@Controller('auth')
+@Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

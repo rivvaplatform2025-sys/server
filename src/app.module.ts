@@ -12,6 +12,10 @@ import { RefreshToken } from './modules/auth/domain/entities/refresh-token.entit
 import { Organization } from './modules/organization/domain/entities/organization.entity';
 import { Permission } from './modules/permissions/domain/entities/permission.entity';
 import { UserRole } from './modules/users/domain/entities/user-role';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { RootController } from './root.controller';
+import { WelcomeService } from './shared/welcome/welcome.service';
 
 @Module({
   imports: [
@@ -49,8 +53,8 @@ import { UserRole } from './modules/users/domain/entities/user-role';
     }),
     AuthModule,
   ],
-  // providers: [AuthService, JwtStrategy],
-  // controllers: [AuthController],
+  providers: [AppService, WelcomeService],
+  controllers: [RootController, AppController],
   // exports: [AuthService],
 })
 export class AppModule {}
