@@ -12,7 +12,14 @@ import { SwaggerConfig } from './shared/swagger/swagger.options';
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+    cors: {
+      origin: '*', // or specify your frontend URL
+      methods: 'GET,POST,PUT,DELETE',
+      credentials: true,
+    },
+  });
 
   // Prefix and versioning
   // app.setGlobalPrefix('api');

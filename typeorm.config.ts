@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
-//import path from 'path';
 
 import { Role } from 'src/modules/role/domain/entities/role.entity';
 import { RolePermission } from 'src/modules/role/domain/entities/role-permission.entity';
@@ -17,8 +16,8 @@ config();
 
 const dataSource = new DataSource({
   type: 'postgres',
-  url: process.env.SUPABASE_DB_URL,
-  ssl: { rejectUnauthorized: false },
+  url: process.env.DATABASE_URL,
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   synchronize: false,
   logging: true,
   entities: [
@@ -34,7 +33,6 @@ const dataSource = new DataSource({
     RefreshToken,
   ],
   migrations: ['src/database/migrations/*.ts'],
-  //migrations: [migrationsPath],
 });
 
 export default dataSource;

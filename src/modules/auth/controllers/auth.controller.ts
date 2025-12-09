@@ -30,7 +30,8 @@ export class AuthController {
     const user = await this.authService.register(
       dto.email,
       dto.password,
-      dto.fullName,
+      dto.firstName,
+      dto.lastName,
       dto.roleName,
     );
     return { id: user.id, email: user.email };

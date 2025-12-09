@@ -11,9 +11,15 @@ export class RegisterDto {
   @MinLength(8)
   password: string;
 
-  @ApiProperty({ example: 'Jane Doe' })
+  @ApiProperty({ example: 'Jane' })
   @IsNotEmpty()
-  fullName: string;
+  @MinLength(2)
+  firstName: string;
+
+  @ApiProperty({ example: 'Doe' })
+  @IsNotEmpty()
+  @MinLength(2)
+  lastName: string;
 
   @ApiProperty({ example: 'Designer or Creator' })
   @IsNotEmpty()

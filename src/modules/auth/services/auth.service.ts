@@ -41,7 +41,8 @@ export class AuthService {
   async register(
     email: string,
     password: string,
-    fullName: string,
+    firstName: string,
+    lastName: string,
     roleName: string,
   ): Promise<User> {
     const existing = await this.userRepo.findOne({ where: { email } });
@@ -61,7 +62,8 @@ export class AuthService {
       const user = manager.create(User, {
         email,
         passwordHashed: hashed,
-        fullName,
+        firstName,
+        lastName,
         isVerified: false,
       });
 
@@ -113,7 +115,8 @@ export class AuthService {
       select: {
         id: true,
         email: true,
-        fullName: true,
+        firstName: true,
+        lastName: true,
         phone: true,
         passwordHashed: true,
         isVerified: true,
@@ -172,7 +175,8 @@ export class AuthService {
       user: {
         id: user_profile.id,
         email: user_profile.email,
-        fullName: user_profile.fullName,
+        firstName: user_profile.firstName,
+        lastName: user_profile.lastName,
         roles,
       },
     };

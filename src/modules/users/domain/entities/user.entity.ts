@@ -1,3 +1,4 @@
+// src/modules/users/domain/entities/user.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -26,8 +27,11 @@ export class User {
   @Column({ type: 'text' })
   passwordHashed: string;
 
-  @Column()
-  fullName: string;
+  @Column({ nullable: true })
+  firstName: string;
+
+  @Column({ nullable: true })
+  lastName: string;
 
   @Column({ nullable: true })
   phone?: string;
