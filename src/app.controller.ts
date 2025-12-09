@@ -12,9 +12,8 @@ export class AppController {
     summary: 'Welcome message for the Rivva Service Platform',
   })
   getWelcome(): { message: string } {
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
     return {
-      message: `🎉 Welcome to the Rivva Service API Platform! Base URL is ready. Visit the documentation url: http://localhost:${port}/docs for more information.`,
+      message: `🎉 Welcome to the Rivva Service API Platform! Base URL is ready. Visit the documentation url: https://rivva-server.onrender.com/docs for more information.`,
     };
   }
 }
