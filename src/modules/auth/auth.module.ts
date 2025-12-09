@@ -16,6 +16,8 @@ import { RolesModule } from '../role/roles.module';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { Organization } from '../organization/domain/entities/organization.entity';
 import { OrganizationsModule } from '../organization/organizations.module';
+import { Permission } from '../permissions/domain/entities/permission.entity';
+import { UserRole } from '../users/domain/entities/user-role';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { OrganizationsModule } from '../organization/organizations.module';
       Organization,
       RefreshToken,
       Role,
+      UserRole,
+      Permission,
       RolePermission,
     ]),
     JwtModule.registerAsync({

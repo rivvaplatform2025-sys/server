@@ -6,7 +6,6 @@ import { RequestHandler } from 'express';
 @Module({})
 export class HelmetModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const helmetMiddleware = helmet({
       // Customize security headers here
       xFrameOptions: { action: 'deny' },

@@ -10,6 +10,8 @@ import { User } from './modules/users/domain/entities/user.entity';
 import { VerificationToken } from './modules/verification/domain/entities/verification-token.entity';
 import { RefreshToken } from './modules/auth/domain/entities/refresh-token.entity';
 import { Organization } from './modules/organization/domain/entities/organization.entity';
+import { Permission } from './modules/permissions/domain/entities/permission.entity';
+import { UserRole } from './modules/users/domain/entities/user-role';
 
 @Module({
   imports: [
@@ -33,7 +35,9 @@ import { Organization } from './modules/organization/domain/entities/organizatio
             RefreshToken,
             Organization,
             Role,
+            Permission,
             RolePermission,
+            UserRole,
           ],
 
           extra: {
