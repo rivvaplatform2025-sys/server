@@ -16,6 +16,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RootController } from './root.controller';
 import { WelcomeService } from './shared/welcome/welcome.service';
+import { NewsletterSubscriber } from './modules/newsletter/domain/entities/newsletter-subscriber.entity';
+import { NewsletterModule } from './modules/newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -42,6 +44,7 @@ import { WelcomeService } from './shared/welcome/welcome.service';
             Permission,
             RolePermission,
             UserRole,
+            NewsletterSubscriber,
           ],
 
           extra: {
@@ -52,6 +55,7 @@ import { WelcomeService } from './shared/welcome/welcome.service';
       },
     }),
     AuthModule,
+    NewsletterModule,
   ],
   providers: [AppService, WelcomeService],
   controllers: [RootController, AppController],

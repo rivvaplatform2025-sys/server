@@ -11,6 +11,7 @@ import { NotificationType } from 'src/modules/notification/domain/entities/notif
 import { NotificationTemplate } from 'src/modules/notification/domain/entities/notification-template.entity';
 import { RefreshToken } from 'src/modules/auth/domain/entities/refresh-token.entity';
 import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
+import { NewsletterSubscriber } from 'src/modules/newsletter/domain/entities/newsletter-subscriber.entity';
 
 config();
 
@@ -31,6 +32,7 @@ const dataSource = new DataSource({
     NotificationType,
     NotificationTemplate,
     RefreshToken,
+    NewsletterSubscriber,
   ],
   migrations: ['src/database/migrations/*.ts'],
 });
