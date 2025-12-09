@@ -20,6 +20,6 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src/**/*", "src/serverless.ts", "api/**/*.mjs", "api/**/*.js"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "test", "dist"]
 }
