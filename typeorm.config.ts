@@ -12,6 +12,12 @@ import { NotificationTemplate } from 'src/modules/notification/domain/entities/n
 import { RefreshToken } from 'src/modules/auth/domain/entities/refresh-token.entity';
 import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
 import { NewsletterSubscriber } from 'src/modules/newsletter/domain/entities/newsletter-subscriber.entity';
+import { Platform } from 'src/modules/platform/domain/entities/platform.entity';
+import { CategoryType } from 'src/modules/category/domain/entities/category-type.entity';
+import { Campaign } from 'src/modules/campaign/domain/entities/campaign.entity';
+import { CampaignAssignment } from 'src/modules/campaign/domain/entities/campaign-assignment.entity';
+import { CreativeAsset } from 'src/modules/assets/domain/entities/creative-assets.entity';
+import { CampaignComment } from 'src/modules/campaign/domain/entities/campaign-comment.entity';
 
 config();
 
@@ -33,6 +39,12 @@ const dataSource = new DataSource({
     NotificationTemplate,
     RefreshToken,
     NewsletterSubscriber,
+    Platform,
+    CategoryType,
+    Campaign,
+    CampaignAssignment,
+    CreativeAsset,
+    CampaignComment,
   ],
   migrations: ['src/database/migrations/*.ts'],
 });

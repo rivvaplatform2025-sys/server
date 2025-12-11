@@ -5,6 +5,7 @@ import {
   HttpCode,
   UseGuards,
   Get,
+  Param,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
@@ -16,8 +17,10 @@ import {
   CurrentUser,
   IAuthenticatedRequest,
 } from '../decorators/current-user.decorator';
-// import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-// import { CurrentUser } from '../decorators/current-user.decorator';
+import {
+  OrganizationRequestDto,
+  OrganizationResponseDto,
+} from '../application/dto/organization.dto';
 
 @ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
@@ -35,6 +38,18 @@ export class AuthController {
       dto.roleName,
     );
     return { id: user.id, email: user.email };
+  }
+
+  @Post('create-organization/:email')
+  @ApiOperation({
+    summary: 'Create Organization based on the user previously created',
+  })
+  async createOrganization(
+    @Param('email') email: string,
+    @Body() dto: OrganizationRequestDto,
+  ): Promise<OrganizationResponseDto> {
+    console.log('Controller Profile', email);
+    return await this.authService.createOrganisation(email, dto);
   }
 
   @Post('login')

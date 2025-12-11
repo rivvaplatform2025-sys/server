@@ -1,3 +1,5 @@
+// src/modules/organization/domain/entities/organization.entity.ts
+import { Campaign } from 'src/modules/campaign/domain/entities/campaign.entity';
 import { User } from '../../../users/domain/entities/user.entity';
 import {
   Entity,
@@ -17,6 +19,15 @@ export class Organization {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  email: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
+
+  @Column({ nullable: true })
+  website: string;
+
   @Column({ unique: true })
   slug: string;
 
@@ -28,6 +39,9 @@ export class Organization {
 
   @OneToMany(() => User, (user) => user.organization)
   users: User[];
+
+  @OneToMany(() => Campaign, (campaign) => campaign.organization)
+  campaigns: Campaign[];
 
   @CreateDateColumn()
   createdAt: Date;

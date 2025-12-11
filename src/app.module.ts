@@ -18,6 +18,12 @@ import { RootController } from './root.controller';
 import { WelcomeService } from './shared/welcome/welcome.service';
 import { NewsletterSubscriber } from './modules/newsletter/domain/entities/newsletter-subscriber.entity';
 import { NewsletterModule } from './modules/newsletter/newsletter.module';
+import { Platform } from './modules/platform/domain/entities/platform.entity';
+import { CategoryType } from './modules/category/domain/entities/category-type.entity';
+import { Campaign } from './modules/campaign/domain/entities/campaign.entity';
+import { CampaignAssignment } from './modules/campaign/domain/entities/campaign-assignment.entity';
+import { CreativeAsset } from './modules/assets/domain/entities/creative-assets.entity';
+import { CampaignComment } from './modules/campaign/domain/entities/campaign-comment.entity';
 
 @Module({
   imports: [
@@ -45,6 +51,12 @@ import { NewsletterModule } from './modules/newsletter/newsletter.module';
             RolePermission,
             UserRole,
             NewsletterSubscriber,
+            Platform,
+            CategoryType,
+            Campaign,
+            CampaignAssignment,
+            CreativeAsset,
+            CampaignComment,
           ],
 
           extra: {

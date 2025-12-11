@@ -18,6 +18,7 @@ import { Organization } from '../organization/domain/entities/organization.entit
 import { OrganizationsModule } from '../organization/organizations.module';
 import { Permission } from '../permissions/domain/entities/permission.entity';
 import { UserRole } from '../users/domain/entities/user-role';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UserRole } from '../users/domain/entities/user-role';
     RolesModule,
     PermissionsModule,
     OrganizationsModule,
+    CommonModule,
     TypeOrmModule.forFeature([
       User,
       VerificationToken,

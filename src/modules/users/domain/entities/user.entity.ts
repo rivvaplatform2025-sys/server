@@ -7,11 +7,16 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { VerificationToken } from '../../../verification/domain/entities/verification-token.entity';
 import { UserRole } from './user-role';
 import { RefreshToken } from 'src/modules/auth/domain/entities/refresh-token.entity';
 import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
+import { CategoryType } from 'src/modules/category/domain/entities/category-type.entity';
+import { Campaign } from 'src/modules/campaign/domain/entities/campaign.entity';
+import { CampaignAssignment } from 'src/modules/campaign/domain/entities/campaign-assignment.entity';
 
 @Entity('users')
 export class User {
@@ -19,7 +24,7 @@ export class User {
   id: string;
 
   @ManyToOne(() => Organization, (org) => org.users, { nullable: true })
-  organization: Organization;
+  organization: Organization | null;
 
   @Column({ unique: true })
   email: string;
@@ -59,4 +64,18 @@ export class User {
 
   @OneToMany(() => RefreshToken, (rt) => rt.user)
   refreshTokens: RefreshToken[];
+
+  @ManyToMany(() => CategoryType, (category) => category.users)
+  @JoinTable({
+    name: 'user_categorytypes',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
+  })
+  categories: CategoryType[];
+
+  @OneToMany(() => Campaign, (c) => c.manager)
+  managedCampaigns: Campaign[];
+
+  @OneToMany(() => CampaignAssignment, (a) => a.user)
+  assignments: CampaignAssignment[];
 }

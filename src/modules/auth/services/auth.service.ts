@@ -2,6 +2,8 @@ import {
   Injectable,
   BadRequestException,
   UnauthorizedException,
+  NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,6 +18,13 @@ import { LoginResponse } from '../types/auth-response.type';
 import { JwtAccessPayload, JwtRefreshPayload } from '../types/jwt-payload.type';
 import { Role } from 'src/modules/role/domain/entities/role.entity';
 import { UserRole } from 'src/modules/users/domain/entities/user-role';
+import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
+import {
+  OrganizationRequestDto,
+  OrganizationResponseDto,
+} from '../application/dto/organization.dto';
+import { SlugService } from 'src/common/helpers/slug';
+import { getErrorMessage } from 'src/common/utils/error.util';
 
 @Injectable()
 export class AuthService {
@@ -29,13 +38,99 @@ export class AuthService {
     private readonly rtRepo: Repository<RefreshToken>,
     @InjectRepository(Role)
     private readonly roleRepo: Repository<Role>,
+    @InjectRepository(Organization)
+    private readonly orgRepo: Repository<Organization>,
+
     private dataSource: DataSource,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly slugSvc: SlugService,
   ) {
     this.saltRounds = Number(
       this.config.get<number>('BCRYPT_SALT_ROUNDS') ?? 12,
     );
+  }
+  async createOrganisation(
+    email: string,
+    request: OrganizationRequestDto,
+  ): Promise<OrganizationResponseDto> {
+    let response: OrganizationResponseDto | null = null;
+    // 1. make sure reuqest body information is not empty
+    if (!request || !email || !request.companyName)
+      throw new BadRequestException(
+        'Request body and parameter cannot be empty',
+      );
+
+    // 2. Create a query runner instance
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    // 3. Start DB transaction
+    await queryRunner.startTransaction();
+
+    try {
+      // 4. Get the user inside transaction
+      const user_profile = await queryRunner.manager.findOne(User, {
+        where: { email },
+        relations: ['organization'],
+      });
+      if (!user_profile) {
+        throw new NotFoundException(
+          'Email address for this user does not exist',
+        );
+      }
+
+      if (user_profile.organization) {
+        throw new BadRequestException(
+          'User already belongs to an organization',
+        );
+      }
+
+      // 5. Auto-generate a unique slug
+      const slug_name = await this.slugSvc.generateUnique(
+        request.companyName,
+        async (slug) =>
+          await queryRunner.manager.exists(Organization, {
+            where: { slug },
+          }),
+      );
+
+      // 6. Create organization entity
+      const org_profile = queryRunner.manager.create(Organization, {
+        name: request.companyName,
+        email: request.companyEmail,
+        phoneNumber: request.companyPhoneNumber,
+        website: request.companyWebsite,
+        slug: slug_name,
+        owner: user_profile,
+      });
+
+      // 7. Save organization
+      const savedOrganization = await queryRunner.manager.save(
+        Organization,
+        org_profile,
+      );
+
+      // 9. Assign organization to user and save
+      user_profile.organization = savedOrganization;
+      await queryRunner.manager.save(User, user_profile);
+
+      // 10. Commit transaction
+      await queryRunner.commitTransaction();
+
+      //11. return response
+      response = {
+        id: savedOrganization.id,
+        companyName: savedOrganization.name,
+        UserEmail: email,
+        createdAt: savedOrganization.createdAt,
+      };
+      return response;
+    } catch (err) {
+      const message = getErrorMessage(err);
+      console.log('Organization Service: ', message);
+      throw new InternalServerErrorException(message);
+    }
   }
 
   async register(
