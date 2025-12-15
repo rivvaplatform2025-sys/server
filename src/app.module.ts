@@ -24,6 +24,9 @@ import { Campaign } from './modules/campaign/domain/entities/campaign.entity';
 import { CampaignAssignment } from './modules/campaign/domain/entities/campaign-assignment.entity';
 import { CreativeAsset } from './modules/assets/domain/entities/creative-assets.entity';
 import { CampaignComment } from './modules/campaign/domain/entities/campaign-comment.entity';
+import { OrganizationInvitation } from './modules/organization/domain/entities/invitation.entity';
+import { NotificationType } from './modules/notification/domain/entities/notification-type.entity';
+import { NotificationTemplate } from './modules/notification/domain/entities/notification-template.entity';
 
 @Module({
   imports: [
@@ -57,6 +60,9 @@ import { CampaignComment } from './modules/campaign/domain/entities/campaign-com
             CampaignAssignment,
             CreativeAsset,
             CampaignComment,
+            OrganizationInvitation,
+            NotificationType,
+            NotificationTemplate,
           ],
 
           extra: {

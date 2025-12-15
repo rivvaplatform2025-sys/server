@@ -19,10 +19,12 @@ export const CurrentUser = createParamDecorator(
   ): CurrentUserReturn<K> => {
     const req = ctx.switchToHttp().getRequest<IAuthenticatedRequest>();
     const user = req.user;
+    console.log('Current User Decorator: ', user);
 
-    if (data) {
+    if (data !== undefined) {
       // user may be undefined → safe optional access
-      return (user ? user[data] : undefined) as CurrentUserReturn<K>;
+      // return (user ? user[data] : undefined) as CurrentUserReturn<K>;
+      return user?.[data] as CurrentUserReturn<K>;
     }
 
     // return full user

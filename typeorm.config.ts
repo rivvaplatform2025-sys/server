@@ -18,6 +18,7 @@ import { Campaign } from 'src/modules/campaign/domain/entities/campaign.entity';
 import { CampaignAssignment } from 'src/modules/campaign/domain/entities/campaign-assignment.entity';
 import { CreativeAsset } from 'src/modules/assets/domain/entities/creative-assets.entity';
 import { CampaignComment } from 'src/modules/campaign/domain/entities/campaign-comment.entity';
+import { OrganizationInvitation } from 'src/modules/organization/domain/entities/invitation.entity';
 
 config();
 
@@ -45,6 +46,7 @@ const dataSource = new DataSource({
     CampaignAssignment,
     CreativeAsset,
     CampaignComment,
+    OrganizationInvitation,
   ],
   migrations: ['src/database/migrations/*.ts'],
 });
