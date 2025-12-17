@@ -5,6 +5,7 @@ export interface AuthenticatedUser {
   firstName?: string;
   lastName?: string;
   roles: string[];
+  organizationId?: string;
 }
 export interface LoginResponse {
   accessToken: string;

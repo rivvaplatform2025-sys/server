@@ -23,7 +23,6 @@ export const CurrentUser = createParamDecorator(
 
     if (data !== undefined) {
       // user may be undefined → safe optional access
-      // return (user ? user[data] : undefined) as CurrentUserReturn<K>;
       return user?.[data] as CurrentUserReturn<K>;
     }
 

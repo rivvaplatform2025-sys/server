@@ -216,6 +216,7 @@ export class AuthService {
         passwordHashed: true,
         isVerified: true,
         createdAt: true,
+        organization: true,
       },
       relations: ['userRoles', 'userRoles.role'],
     });
@@ -243,6 +244,9 @@ export class AuthService {
       sub: user_profile.id,
       email: user_profile.email,
       roles,
+      organizationId: user_profile.organization
+        ? user_profile.organization.id
+        : undefined,
     };
     const accessOptions: JwtSignOptions = {
       secret: this.config.get<string>('JWT_ACCESS_TOKEN_SECRET'),
@@ -273,6 +277,7 @@ export class AuthService {
         firstName: user_profile.firstName,
         lastName: user_profile.lastName,
         roles,
+        organizationId: user_profile.organization?.id ?? undefined,
       },
     };
   }
@@ -291,7 +296,7 @@ export class AuthService {
 
     const user = await this.userRepo.findOne({
       where: { id: userId },
-      relations: ['userRoles', 'userRoles.role'],
+      relations: ['organization', 'userRoles', 'userRoles.role'],
     });
     if (!user) throw new UnauthorizedException('Invalid token user');
 
@@ -304,6 +309,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       roles,
+      organizationId: user.organization?.id ?? undefined,
     };
 
     const accessOptions: JwtSignOptions = {

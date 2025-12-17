@@ -27,6 +27,7 @@ import { CampaignComment } from './modules/campaign/domain/entities/campaign-com
 import { OrganizationInvitation } from './modules/organization/domain/entities/invitation.entity';
 import { NotificationType } from './modules/notification/domain/entities/notification-type.entity';
 import { NotificationTemplate } from './modules/notification/domain/entities/notification-template.entity';
+import { CampaignModule } from './modules/campaign/campaign.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { NotificationTemplate } from './modules/notification/domain/entities/not
     }),
     AuthModule,
     NewsletterModule,
+    CampaignModule,
   ],
   providers: [AppService, WelcomeService],
   controllers: [RootController, AppController],

@@ -8,19 +8,18 @@ import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('UserProfile')
 @Controller({ path: 'users/me', version: '1' })
+@UseGuards(JwtAuthGuard)
 export class UserProfileController {
   constructor(
     private readonly commandService: UserCommandService,
     private readonly queryService: UserQueryService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   getMe(@CurrentUser('id') userId: string) {
     return this.queryService.getMe(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('profile')
   updateProfile(
     @CurrentUser('id') userId: string,
