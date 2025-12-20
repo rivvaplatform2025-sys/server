@@ -9,13 +9,15 @@ export class SwaggerConfig {
       .setTitle('API Documentation')
       .setDescription('Auto-generated Swagger OpenAPI documentation')
       .setVersion('1.0')
-      .addBearerAuth({
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        in: 'header',
-      })
-      .addCookieAuth('access_token')
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          in: 'header',
+        },
+        'access-token',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

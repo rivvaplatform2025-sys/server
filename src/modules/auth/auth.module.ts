@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { RefreshToken } from './domain/entities/refresh-token.entity';
 import { User } from '../users/domain/entities/user.entity';
 import { VerificationToken } from '../verification/domain/entities/verification-token.entity';
@@ -19,10 +19,10 @@ import { OrganizationsModule } from '../organization/organizations.module';
 import { Permission } from '../permissions/domain/entities/permission.entity';
 import { UserRole } from '../users/domain/entities/user-role';
 import { CommonModule } from 'src/common/common.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    ConfigModule,
     UsersModule,
     VerificationTokenModule,
     RolesModule,
@@ -39,11 +39,11 @@ import { CommonModule } from 'src/common/common.module';
       Permission,
       RolePermission,
     ]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_ACCESS_SECRET') ?? 'access_tokn_here',
+        secret: config.get<string>('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
           expiresIn: config.get<number>('JWT_ACCESS_TOKEN_EXPIRES_IN') ?? '15m',
         },
@@ -52,6 +52,6 @@ import { CommonModule } from 'src/common/common.module';
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule, PassportModule],
 })
 export class AuthModule {}

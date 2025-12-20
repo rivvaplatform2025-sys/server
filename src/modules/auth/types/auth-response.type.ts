@@ -4,6 +4,9 @@ export interface AuthenticatedUser {
   email: string;
   firstName?: string;
   lastName?: string;
+  avatarUrl?: string;
+  phone?: string;
+  isVerified: boolean;
   roles: string[];
   organizationId?: string;
 }

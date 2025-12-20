@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 
 export enum OnboardingRole {
-  BRAND_MANAGER = 'brand_manager',
+  BRAND_MANAGER = 'brand manager',
   CREATOR = 'creator',
   DESIGNER = 'designer',
 }

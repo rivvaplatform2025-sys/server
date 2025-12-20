@@ -2,7 +2,6 @@
 export class PaginatedResponseDto<T> {
   success: boolean;
   timestamp: string;
-  path?: string | null;
   data: {
     items: T[];
     meta: {
@@ -12,6 +11,5 @@ export class PaginatedResponseDto<T> {
       totalPages: number;
       currentPage: number;
     };
-    links?: Record<string, string | null>;
   };
 }
