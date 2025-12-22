@@ -6,7 +6,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { SwaggerConfig } from './shared/swagger/swagger.options';
 //import { HelmetModule } from './common/security/helmet.module';
 //import { RateLimitFactory } from './common/security/rate-limit.factory';
-//import cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 //import { HelmetModule } from './common/security/helmet.module';
 
 async function bootstrap() {
@@ -14,19 +14,16 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
-    cors: {
-      origin: '*', // or specify your frontend URL
-      methods: 'GET,POST,PUT,DELETE',
-      credentials: true,
-    },
   });
 
-  // Prefix and versioning
-  // app.setGlobalPrefix('api');
-  // app.enableVersioning({
-  //   type: VersioningType.URI,
-  //   defaultVersion: '1',
-  // });
+  app.use(cookieParser());
+  app.enableCors({
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? 'https://app.rivva.com'
+        : 'http://localhost:3000',
+    credentials: true,
+  });
 
   // Global validation
   app.useGlobalPipes(
@@ -38,9 +35,6 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
-
-  // ---- Cookie Parser ----
-  //app.use(cookieParser());
 
   // Use helmet from your module
   // const helmet = app.get(HelmetModule);
@@ -64,7 +58,7 @@ async function bootstrap() {
   // Swagger (only enabled in non-production by default)
   SwaggerConfig.setup(app);
 
-  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 6030;
   await app.listen(port);
   logger.log(`🚀 Application running on http://localhost:${port}`);
 }

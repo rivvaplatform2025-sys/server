@@ -21,6 +21,9 @@ export class UserResponseDto {
   phone?: string;
 
   @ApiProperty()
+  bio?: string;
+
+  @ApiProperty()
   avatarUrl?: string;
 
   @ApiProperty()

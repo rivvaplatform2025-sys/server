@@ -3,6 +3,16 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtAccessPayload } from '../types/jwt-payload.type';
+import { Request } from 'express';
+
+export interface AuthCookies {
+  rivva_access_token?: string;
+  rivva_refresh_token?: string;
+}
+
+export type RequestWithCookies = Request & {
+  cookies?: AuthCookies;
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -14,11 +24,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       );
     }
 
+    const cookieExtractor = (req: RequestWithCookies): string | null => {
+      const token = req.cookies?.rivva_access_token;
+      return typeof token === 'string' ? token : null;
+    };
+
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        cookieExtractor,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
       secretOrKey: secret,
-      passReqToCallback: false,
     });
   }
 

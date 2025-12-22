@@ -34,6 +34,9 @@ export class Organization {
   @Column({ nullable: true })
   logoUrl: string;
 
+  @Column({ nullable: true })
+  address?: string;
+
   @ManyToOne(() => User, { nullable: true })
   owner: User;
 

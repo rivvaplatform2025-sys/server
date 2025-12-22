@@ -9,6 +9,7 @@ export class UserMapper {
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone ?? undefined,
+      bio: user.bio ?? undefined,
       avatarUrl: user.avatarUrl ?? undefined,
       isVerified: user.isVerified,
       lastLoginAt: user.lastLoginAt,

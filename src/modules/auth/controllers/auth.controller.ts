@@ -6,12 +6,15 @@ import {
   UseGuards,
   Get,
   Param,
+  Res,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { RegisterDto } from '../application/dto/register.dto';
 import { LoginDto } from '../application/dto/login.dto';
-import { RefreshTokenDto } from '../application/dto/refresh-token.dto';
+//import { RefreshTokenDto } from '../application/dto/refresh-token.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import {
   CurrentUser,
@@ -21,6 +24,8 @@ import {
   OrganizationRequestDto,
   OrganizationResponseDto,
 } from '../application/dto/organization.dto';
+import { Request, Response } from 'express';
+import { RequestWithCookies } from '../strategies/jwt.strategy';
 
 @ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
@@ -55,15 +60,60 @@ export class AuthController {
   @Post('login')
   @ApiOperation({ summary: 'Login with email/password' })
   @HttpCode(200)
-  async login(@Body() dto: LoginDto) {
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const user = await this.authService.login(dto.email, dto.password);
+    // ACCESS TOKEN
+    res.cookie('rivva_access_token', user.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 1000 * 60 * 30, // 30 mins
+    });
+
+    // REFRESH TOKEN
+    res.cookie('rivva_refresh_token', user.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
     return user;
   }
 
   @Post('refresh')
   @ApiOperation({ summary: 'Use refresh token to obtain new tokens' })
-  async refresh(@Body() dto: RefreshTokenDto) {
-    return this.authService.refresh(dto.refreshToken);
+  async refresh(
+    @Req() req: RequestWithCookies,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies.rivva_refresh_token;
+    if (!refreshToken) throw new UnauthorizedException();
+
+    const { accessToken } = await this.authService.refresh(refreshToken);
+
+    res.cookie('rivva_access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 1000 * 60 * 30,
+    });
+
+    return { success: true };
+  }
+
+  @Post('logout')
+  @ApiOperation({ summary: 'Logout and revoke refresh token' })
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('rivva_access_token', { path: '/' });
+    res.clearCookie('rivva_refresh_token', { path: '/' });
+
+    return { success: true };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -95,10 +145,10 @@ export class AuthController {
     return { success: true };
   }
 
-  @Post('logout')
-  @ApiOperation({ summary: 'Logout and revoke refresh token' })
-  async logout(@Body() body: { refreshToken: string }) {
-    await this.authService.revokeRefreshToken(body.refreshToken);
-    return { success: true };
-  }
+  // @Post('logout')
+  // @ApiOperation({ summary: 'Logout and revoke refresh token' })
+  // async logout(@Body() body: { refreshToken: string }) {
+  //   await this.authService.revokeRefreshToken(body.refreshToken);
+  //   return { success: true };
+  // }
 }

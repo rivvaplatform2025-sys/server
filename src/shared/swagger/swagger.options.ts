@@ -18,6 +18,10 @@ export class SwaggerConfig {
         },
         'access-token',
       )
+      .addCookieAuth('rivva_access_token', {
+        type: 'apiKey',
+        in: 'cookie',
+      })
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
