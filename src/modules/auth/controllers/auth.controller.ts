@@ -25,7 +25,6 @@ import {
   OrganizationResponseDto,
 } from '../application/dto/organization.dto';
 import { Request, Response } from 'express';
-import { RequestWithCookies } from '../strategies/jwt.strategy';
 
 @ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
@@ -88,11 +87,17 @@ export class AuthController {
   @Post('refresh')
   @ApiOperation({ summary: 'Use refresh token to obtain new tokens' })
   async refresh(
-    @Req() req: RequestWithCookies,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const refreshToken = req.cookies.rivva_refresh_token;
-    if (!refreshToken) throw new UnauthorizedException();
+    const refreshToken =
+      typeof req.cookies?.rivva_refresh_token === 'string'
+        ? req.cookies.rivva_refresh_token
+        : null;
+
+    if (!refreshToken) {
+      throw new UnauthorizedException();
+    }
 
     const { accessToken } = await this.authService.refresh(refreshToken);
 
