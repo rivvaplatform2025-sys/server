@@ -20,7 +20,7 @@ async function bootstrap() {
   app.enableCors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? 'https://app.rivva.com'
+        ? 'https://rivva-client.vercel.app/'
         : 'http://localhost:3000',
     credentials: true,
   });
