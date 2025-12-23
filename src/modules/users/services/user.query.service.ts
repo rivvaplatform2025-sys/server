@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { User } from '../domain/entities/user.entity';
 import { UserMapper } from 'src/modules/users/application/mapping/user.mapper';
 import { UserResponseDto } from '../application/dto/user-response.dto';
+import { PaginationDto } from 'src/shared/dto/pagination.dto';
+import { PaginatedResponseDto } from 'src/shared/dto/paginated-response.dto';
 
 @Injectable()
 export class UserQueryService {
@@ -31,5 +33,43 @@ export class UserQueryService {
       throw new NotFoundException('User not found');
 
     return users.map((user) => UserMapper.toResponse(user));
+  }
+
+  async getUsersByRoleId(
+    roleId: string,
+    pagination: PaginationDto,
+  ): Promise<PaginatedResponseDto<UserResponseDto>> {
+    const page = pagination.getPage();
+    const limit = pagination.getLimit();
+
+    const qb = this.userRepo
+      .createQueryBuilder('user')
+      .innerJoin('user.userRoles', 'userRole')
+      .innerJoin('userRole.role', 'role')
+      .leftJoinAndSelect('user.organization', 'organization')
+      .where('role.id = :roleId', { roleId })
+      .orderBy('user.createdAt', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const [users, totalItems] = await qb.getManyAndCount();
+
+    console.log('USER PROFILE SERVICE', users);
+
+    const items = users.map((user) => UserMapper.toResponse(user));
+    return {
+      success: true,
+      timestamp: new Date().toISOString(),
+      data: {
+        items,
+        meta: {
+          totalItems,
+          itemCount: items.length,
+          itemsPerPage: limit,
+          totalPages: Math.ceil(totalItems / limit),
+          currentPage: page,
+        },
+      },
+    };
   }
 }

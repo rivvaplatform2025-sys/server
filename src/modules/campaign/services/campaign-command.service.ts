@@ -1,11 +1,13 @@
+// src/modules/campaign/services/campaign-command.service.ts
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Campaign } from '../domain/entities/campaign.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { User } from 'src/modules/users/domain/entities/user.entity';
 import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
 import {
@@ -16,6 +18,7 @@ import { CampaignStatus } from '../domain/enums/campaign-status.enum';
 import { CampaignResponseDto } from '../application/dto/campaign-response.dto';
 import { CampaignMapper } from '../application/mapping/campaign.mapper';
 import { CampaignWorkflowService } from './campaign.workflow.service';
+import { Platform } from 'src/modules/platform/domain/entities/platform.entity';
 
 @Injectable()
 export class CampaignCommandService {
@@ -26,6 +29,8 @@ export class CampaignCommandService {
     private readonly orgRepo: Repository<Organization>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    @InjectRepository(Platform)
+    private readonly platformRepo: Repository<Platform>,
     private readonly workflow: CampaignWorkflowService,
   ) {}
 
@@ -50,16 +55,27 @@ export class CampaignCommandService {
     if (!userProfile)
       throw new ForbiddenException('User does not belong to this organization');
 
+    // const platforms = await this.platformRepo.findBy({
+    //   id: In(dto.platformIds),
+    // });
+    const platforms = await this.platformRepo.findBy({
+      id: In(dto.platformIds),
+    });
+    if (platforms.length !== dto.platformIds.length) {
+      throw new BadRequestException('One or more platforms are invalid');
+    }
+
     // 3️⃣ Create campaign
     const campaign = this.campaignRepo.create({
       title: dto.title,
       description: dto.description,
-      startDate: dto.startDate,
-      endDate: dto.endDate,
+      startDate: new Date(dto.startDate!),
+      endDate: new Date(dto.endDate!),
       status: CampaignStatus.DRAFT,
       budget: dto.budget,
       manager: userProfile,
       organization,
+      platforms,
     });
 
     await this.campaignRepo.save(campaign);
@@ -70,10 +86,29 @@ export class CampaignCommandService {
   async update(campaignId: string, dto: UpdateCampaignDto) {
     const campaign = await this.campaignRepo.findOne({
       where: { id: campaignId },
+      relations: ['platforms'],
     });
     if (!campaign) throw new NotFoundException('Campaign not found.');
 
-    Object.assign(campaign, dto);
+    if (dto.platformIds) {
+      const platforms = await this.platformRepo.findBy({
+        id: In(dto.platformIds),
+      });
+
+      if (platforms.length !== dto.platformIds.length) {
+        throw new BadRequestException('One or more platforms are invalid');
+      }
+
+      campaign.platforms = platforms; // ✅ correct replacement
+    }
+
+    campaign.title = dto.title ?? campaign.title;
+    campaign.description = dto.description ?? campaign.description;
+    campaign.startDate = dto.startDate
+      ? new Date(dto.startDate)
+      : campaign.startDate;
+    campaign.endDate = dto.endDate ? new Date(dto.endDate) : campaign.endDate;
+    campaign.budget = dto.budget ?? campaign.budget;
 
     const savedCampaign = await this.campaignRepo.save(campaign);
 

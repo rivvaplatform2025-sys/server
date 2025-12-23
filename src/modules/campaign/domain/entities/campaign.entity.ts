@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -13,6 +15,7 @@ import { CampaignAssignment } from './campaign-assignment.entity';
 import { CreativeAsset } from 'src/modules/assets/domain/entities/creative-assets.entity';
 import { CampaignComment } from './campaign-comment.entity';
 import { Organization } from 'src/modules/organization/domain/entities/organization.entity';
+import { Platform } from 'src/modules/platform/domain/entities/platform.entity';
 
 @Entity('campaigns')
 export class Campaign {
@@ -64,4 +67,12 @@ export class Campaign {
 
   @OneToMany(() => CampaignComment, (c) => c.campaign)
   comments: CampaignComment[];
+
+  @ManyToMany(() => Platform, (platform) => platform.campaigns)
+  @JoinTable({
+    name: 'campaign_platforms',
+    joinColumn: { name: 'campaign_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'platform_id', referencedColumnName: 'id' },
+  })
+  platforms: Platform[];
 }

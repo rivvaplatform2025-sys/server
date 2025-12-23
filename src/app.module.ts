@@ -28,6 +28,7 @@ import { OrganizationInvitation } from './modules/organization/domain/entities/i
 import { NotificationType } from './modules/notification/domain/entities/notification-type.entity';
 import { NotificationTemplate } from './modules/notification/domain/entities/notification-template.entity';
 import { CampaignModule } from './modules/campaign/campaign.module';
+import { PlatformModule } from './modules/platform/platform.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { CampaignModule } from './modules/campaign/campaign.module';
     AuthModule,
     NewsletterModule,
     CampaignModule,
+    PlatformModule,
   ],
   providers: [AppService, WelcomeService],
   controllers: [RootController, AppController],

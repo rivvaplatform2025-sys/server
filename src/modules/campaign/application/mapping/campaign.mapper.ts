@@ -10,24 +10,29 @@ export class CampaignMapper {
       status: campaign.status,
       startDate: campaign.startDate,
       endDate: campaign.endDate,
-      budget: campaign.budget,
+      budget: {
+        amount: campaign.budget.amount,
+        currency: campaign.budget.currency,
+      },
+      platforms: campaign.platforms.map((p) => ({
+        platform: {
+          id: p.id,
+          name: p.name,
+        },
+      })),
       createdAt: campaign.createdAt,
-      manager: campaign.manager
-        ? {
-            id: campaign.manager.id,
-            email: campaign.manager.email,
-            firstName: campaign.manager.firstName,
-            lastName: campaign.manager.lastName,
-            phone: campaign.manager.phone,
-            avatarUrl: campaign.manager.avatarUrl,
-          }
-        : undefined,
-      organization: campaign.organization
-        ? {
-            companyName: campaign.organization.name,
-            email: campaign.organization.email,
-          }
-        : undefined,
+      manager: campaign.manager && {
+        id: campaign.manager.id,
+        email: campaign.manager.email,
+        firstName: campaign.manager.firstName,
+        lastName: campaign.manager.lastName,
+        phone: campaign.manager.phone,
+        avatarUrl: campaign.manager.avatarUrl,
+      },
+      organization: campaign.organization && {
+        companyName: campaign.organization.name,
+        email: campaign.organization.email,
+      },
     };
   }
 }

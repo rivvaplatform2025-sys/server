@@ -1,5 +1,6 @@
 // src/modules/platform/domain/entities/platform.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Campaign } from 'src/modules/campaign/domain/entities/campaign.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 @Entity('platforms')
 export class Platform {
@@ -11,4 +12,7 @@ export class Platform {
 
   @Column({ nullable: true })
   iconUrl: string; // optional (store icon in supabase)
+
+  @ManyToMany(() => Campaign, (campaign) => campaign.platforms)
+  campaigns: Campaign[];
 }

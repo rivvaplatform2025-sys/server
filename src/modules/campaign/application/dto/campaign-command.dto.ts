@@ -1,49 +1,78 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsObject, IsString } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CampaignBudget {
-  @ApiProperty()
+  @ApiProperty({ example: 5000 })
+  @IsNotEmpty()
   amount: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'USD' })
+  @IsString()
   currency: string;
 }
 
 export class CreateCampaignDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Influencer Launch Campaign' })
   @IsString()
+  @IsNotEmpty()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Campaign description...' })
   @IsString()
   description?: string;
 
-  @ApiProperty()
-  @IsDate()
-  startDate?: Date;
+  @ApiProperty({ example: '2025-02-01' })
+  @IsDateString()
+  startDate?: string;
 
-  @ApiProperty()
-  @IsDate()
-  endDate?: Date;
+  @ApiProperty({ example: '2025-03-01' })
+  @IsDateString()
+  endDate?: string;
 
   @ApiProperty({ type: CampaignBudget })
-  @IsObject()
+  @ValidateNested()
+  @Type(() => CampaignBudget)
   budget?: CampaignBudget;
+
+  @ApiProperty({
+    type: [String],
+    description: 'Array of platform IDs',
+    example: ['uuid-1', 'uuid-2'],
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsUUID('4', { each: true })
+  platformIds: string[];
 }
 
 export class UpdateCampaignDto {
-  @ApiProperty()
+  @IsString()
   title?: string;
 
-  @ApiProperty()
+  @IsString()
   description?: string;
 
-  @ApiProperty()
-  startDate?: Date;
+  @IsDateString()
+  startDate?: string;
 
-  @ApiProperty()
-  endDate?: Date;
+  @IsDateString()
+  endDate?: string;
 
-  @ApiProperty()
+  @ValidateNested()
+  @Type(() => CampaignBudget)
   budget?: CampaignBudget;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsUUID('4', { each: true })
+  platformIds: string[];
 }

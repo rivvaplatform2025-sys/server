@@ -11,7 +11,7 @@ import {
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
-import { CampaignCommandService } from '../services/campaign.command.service';
+import { CampaignCommandService } from '../services/campaign-command.service';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 import { User } from 'src/modules/users/domain/entities/user.entity';
 import {
@@ -28,7 +28,7 @@ import { CampaignQueryService } from '../services/campaign-query.service';
 @ApiTags('Campaign')
 @Controller({ path: 'campaigns/manager', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('brand_manager')
+@Roles('Brand Manager')
 export class CampaignManagerController {
   constructor(
     private readonly commandService: CampaignCommandService,

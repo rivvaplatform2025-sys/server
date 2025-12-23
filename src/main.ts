@@ -18,10 +18,10 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? 'https://rivva-client.vercel.app'
-        : 'http://localhost:3000',
+    origin: ['https://rivva-client.vercel.app', 'http://localhost:3000'],
+    // process.env.NODE_ENV === 'production'
+    //   ? 'https://rivva-client.vercel.app'
+    //   : 'http://localhost:3000',
     credentials: true,
   });
 

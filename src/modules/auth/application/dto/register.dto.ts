@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsUUID, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
@@ -21,7 +21,11 @@ export class RegisterDto {
   @MinLength(2)
   lastName: string;
 
-  @ApiProperty({ example: 'Designer or Creator' })
+  @ApiProperty({
+    description: 'Role IDs',
+    example: 'uuid-1',
+  })
   @IsNotEmpty()
-  roleName: string;
+  @IsUUID()
+  roleId: string;
 }

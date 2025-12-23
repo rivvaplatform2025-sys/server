@@ -138,14 +138,13 @@ export class AuthService {
     password: string,
     firstName: string,
     lastName: string,
-    roleName: string,
+    roleId: string,
   ): Promise<User> {
     const existing = await this.userRepo.findOne({ where: { email } });
     if (existing) throw new BadRequestException('Email already in use');
 
     const role = await this.roleRepo.findOne({
-      where: { name: roleName },
-      select: { id: true },
+      where: { id: roleId },
     });
     if (!role)
       throw new BadRequestException('Invalid Role in the request body');
@@ -217,13 +216,13 @@ export class AuthService {
         avatarUrl: true,
         isVerified: true,
         createdAt: true,
-        organization: true,
       },
-      relations: ['userRoles', 'userRoles.role'],
+      relations: ['userRoles', 'userRoles.role', 'organization'],
     });
     if (!user_profile) {
       throw new UnauthorizedException('Invalid credentials');
     }
+    // console.log('Authentication Service - User profile', user_profile);
 
     const validPassword = await bcrypt.compare(
       password,

@@ -1,6 +1,7 @@
 import { IsOptional, IsEnum, IsString, IsUUID } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { CampaignStatus } from '../../domain/enums/campaign-status.enum';
+import { CampaignPlatformDto } from './campaign-response.dto';
 
 export class CampaignFilterDto {
   @ApiPropertyOptional({
@@ -25,4 +26,10 @@ export class CampaignFilterDto {
   @IsOptional()
   @IsUUID()
   managerId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter campaigns by platform',
+  })
+  @IsOptional()
+  platform?: CampaignPlatformDto;
 }
