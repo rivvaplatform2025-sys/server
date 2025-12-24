@@ -66,18 +66,18 @@ export class AuthController {
     const user = await this.authService.login(dto.email, dto.password);
     // ACCESS TOKEN
     res.cookie('rivva_access_token', user.accessToken, {
-      httpOnly: process.env.NODE_ENV === 'production',
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 1000 * 60 * 30, // 30 mins
     });
 
     // REFRESH TOKEN
     res.cookie('rivva_refresh_token', user.refreshToken, {
-      httpOnly: process.env.NODE_ENV === 'production',
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
@@ -104,7 +104,7 @@ export class AuthController {
     res.cookie('rivva_access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 1000 * 60 * 30,
     });
