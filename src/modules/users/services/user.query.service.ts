@@ -54,8 +54,6 @@ export class UserQueryService {
 
     const [users, totalItems] = await qb.getManyAndCount();
 
-    console.log('USER PROFILE SERVICE', users);
-
     const items = users.map((user) => UserMapper.toResponse(user));
     return {
       success: true,

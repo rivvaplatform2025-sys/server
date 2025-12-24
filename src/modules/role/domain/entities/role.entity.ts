@@ -1,3 +1,4 @@
+// src/modules/role/domain/entities/role.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,

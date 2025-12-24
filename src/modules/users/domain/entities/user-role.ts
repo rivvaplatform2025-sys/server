@@ -1,4 +1,4 @@
-//import { Role } from '../../../role/domain/entities/role.entity';
+// src/modules/users/domain/entities/user-role.entity.ts
 import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 import { Role } from 'src/modules/role/domain/entities/role.entity';

@@ -66,7 +66,7 @@ export class AuthController {
     const user = await this.authService.login(dto.email, dto.password);
     // ACCESS TOKEN
     res.cookie('rivva_access_token', user.accessToken, {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production',
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
@@ -75,7 +75,7 @@ export class AuthController {
 
     // REFRESH TOKEN
     res.cookie('rivva_refresh_token', user.refreshToken, {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production',
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
