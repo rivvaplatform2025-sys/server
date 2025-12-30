@@ -9,6 +9,10 @@ import { User } from '../users/domain/entities/user.entity';
 import { CampaignWorkflowService } from './services/campaign.workflow.service';
 import { CampaignQueryService } from './services/campaign-query.service';
 import { Platform } from '../platform/domain/entities/platform.entity';
+import { CampaignAssignmentService } from './services/campaign-assignment.service';
+import { AssignmentNotificationService } from '../notification/services/assignment-notification.service';
+import { MailerModule } from 'src/shared/mailer/mailer.module';
+import { NotificationTemplate } from '../notification/domain/entities/notification-template.entity';
 
 @Module({
   imports: [
@@ -18,12 +22,16 @@ import { Platform } from '../platform/domain/entities/platform.entity';
       Organization,
       User,
       Platform,
+      NotificationTemplate,
     ]),
+    MailerModule,
   ],
   providers: [
     CampaignCommandService,
     CampaignWorkflowService,
     CampaignQueryService,
+    CampaignAssignmentService,
+    AssignmentNotificationService,
   ],
   controllers: [CampaignManagerController],
   exports: [TypeOrmModule],

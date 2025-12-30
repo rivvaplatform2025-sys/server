@@ -29,6 +29,7 @@ import { NotificationType } from './modules/notification/domain/entities/notific
 import { NotificationTemplate } from './modules/notification/domain/entities/notification-template.entity';
 import { CampaignModule } from './modules/campaign/campaign.module';
 import { PlatformModule } from './modules/platform/platform.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { PlatformModule } from './modules/platform/platform.module';
     NewsletterModule,
     CampaignModule,
     PlatformModule,
+    NotificationModule,
   ],
   providers: [AppService, WelcomeService],
   controllers: [RootController, AppController],

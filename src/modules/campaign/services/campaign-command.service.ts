@@ -19,6 +19,7 @@ import { CampaignResponseDto } from '../application/dto/campaign-response.dto';
 import { CampaignMapper } from '../application/mapping/campaign.mapper';
 import { CampaignWorkflowService } from './campaign.workflow.service';
 import { Platform } from 'src/modules/platform/domain/entities/platform.entity';
+import { CampaignAssignmentService } from './campaign-assignment.service';
 
 @Injectable()
 export class CampaignCommandService {
@@ -32,6 +33,7 @@ export class CampaignCommandService {
     @InjectRepository(Platform)
     private readonly platformRepo: Repository<Platform>,
     private readonly workflow: CampaignWorkflowService,
+    private readonly assignmentSvc: CampaignAssignmentService,
   ) {}
 
   async create(
@@ -79,6 +81,13 @@ export class CampaignCommandService {
     });
 
     await this.campaignRepo.save(campaign);
+
+    // Assign creators
+    await this.assignmentSvc.assignUsers(
+      campaign.id,
+      dto.assignments?.creators,
+      dto.assignments?.designers,
+    );
 
     return CampaignMapper.toResponse(campaign);
   }

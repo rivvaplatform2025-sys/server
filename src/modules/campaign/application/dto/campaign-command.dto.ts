@@ -4,6 +4,7 @@ import {
   IsArray,
   IsDateString,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsUUID,
   ValidateNested,
@@ -20,6 +21,20 @@ export class CampaignBudget {
   currency: string;
 }
 
+export class CampaignAssignmentsDto {
+  @ApiProperty({ type: [String], description: 'User IDs of creators' })
+  @IsArray()
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  creators?: string[];
+
+  @ApiProperty({ type: [String], description: 'User IDs of designers' })
+  @IsArray()
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  designers?: string[];
+}
+
 export class CreateCampaignDto {
   @ApiProperty({ example: 'Influencer Launch Campaign' })
   @IsString()
@@ -27,6 +42,7 @@ export class CreateCampaignDto {
   title: string;
 
   @ApiProperty({ example: 'Campaign description...' })
+  @IsOptional()
   @IsString()
   description?: string;
 
@@ -42,6 +58,12 @@ export class CreateCampaignDto {
   @ValidateNested()
   @Type(() => CampaignBudget)
   budget?: CampaignBudget;
+
+  @ApiProperty({ type: CampaignAssignmentsDto })
+  @ValidateNested()
+  @Type(() => CampaignAssignmentsDto)
+  @IsOptional()
+  assignments?: CampaignAssignmentsDto;
 
   @ApiProperty({
     type: [String],

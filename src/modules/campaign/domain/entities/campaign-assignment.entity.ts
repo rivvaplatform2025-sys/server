@@ -15,10 +15,14 @@ export class CampaignAssignment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, (user) => user.assignments)
+  @ManyToOne(() => User, (user) => user.assignments, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.assignments)
+  @ManyToOne(() => Campaign, (campaign) => campaign.assignments, {
+    onDelete: 'CASCADE',
+  })
   campaign: Campaign;
 
   @CreateDateColumn()
