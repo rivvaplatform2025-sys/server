@@ -44,8 +44,8 @@ export class UserQueryService {
 
     const qb = this.userRepo
       .createQueryBuilder('user')
-      .innerJoin('user.userRoles', 'userRole')
-      .innerJoin('userRole.role', 'role')
+      .innerJoinAndSelect('user.userRoles', 'userRole')
+      .innerJoinAndSelect('userRole.role', 'role')
       .leftJoinAndSelect('user.organization', 'organization')
       .where('role.id = :roleId', { roleId })
       .orderBy('user.createdAt', 'DESC')
