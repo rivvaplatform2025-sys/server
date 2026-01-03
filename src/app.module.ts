@@ -30,6 +30,7 @@ import { NotificationTemplate } from './modules/notification/domain/entities/not
 import { CampaignModule } from './modules/campaign/campaign.module';
 import { PlatformModule } from './modules/platform/platform.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { AssetModule } from './modules/assets/asset.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { NotificationModule } from './modules/notification/notification.module';
     AuthModule,
     NewsletterModule,
     CampaignModule,
+    AssetModule,
     PlatformModule,
     NotificationModule,
   ],

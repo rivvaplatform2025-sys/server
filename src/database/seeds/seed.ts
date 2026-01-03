@@ -3,9 +3,9 @@ import dataSource from 'typeorm.config';
 // import { permissionSeed } from './permissions.seed';
 // import { rolePermissionsSeed } from './role-permissions.seed';
 import { getErrorMessage } from 'src/common/utils/error.util';
-//import { notificationsSeed } from './notifications.seed';
+import { notificationsSeed } from './notifications.seed';
 //import { platformSeed } from './platforms.seed';
-import { categoryTypeSeed } from './category-type.seed';
+//import { categoryTypeSeed } from './category-type.seed';
 
 const runSeeds = async () => {
   try {
@@ -15,9 +15,9 @@ const runSeeds = async () => {
     // await roleSeed(dataSource);
     // await permissionSeed(dataSource);
     // await rolePermissionsSeed(dataSource);
-    // await notificationsSeed(dataSource);
+    await notificationsSeed(dataSource);
     // await platformSeed(dataSource);
-    await categoryTypeSeed(dataSource);
+    // await categoryTypeSeed(dataSource);
 
     console.log('🎉 All seeds completed successfully!');
     await dataSource.destroy();

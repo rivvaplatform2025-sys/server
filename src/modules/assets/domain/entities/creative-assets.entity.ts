@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AssetTypeStatus } from '../enums/asset-type-status.enum';
+import { CreativeAssetStatus } from '../enums/asset-status.enum';
 
 @Entity('creative_assets')
 export class CreativeAsset {
@@ -17,8 +18,11 @@ export class CreativeAsset {
   @Column()
   title: string;
 
+  @Column({ type: 'text', nullable: true })
+  description?: string;
+
   @Column({ nullable: true })
-  fileUrl: string; // Supabase storage
+  fileUrl: string; // Supabase / S3 / Cloudinary URL
 
   @Column({ type: 'text', nullable: true })
   content: string;
@@ -32,6 +36,13 @@ export class CreativeAsset {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column({
+    type: 'enum',
+    enum: CreativeAssetStatus,
+    default: CreativeAssetStatus.DRAFT,
+  })
+  status: CreativeAssetStatus;
 
   @ManyToOne(() => Campaign, (c) => c.assets)
   campaign: Campaign;
