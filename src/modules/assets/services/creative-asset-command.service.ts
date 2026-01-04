@@ -136,8 +136,9 @@ export class CreativeAssetCommandService {
       creatorName: `${asset.createdBy.firstName} ${asset.createdBy.lastName}`,
       reviewUrl: '',
     };
+    console.log('Asset Notification Email Submit:', profile);
 
-    await this.assetNotificationService.notifyAssetSubmitted(profile);
+    //await this.assetNotificationService.notifyAssetSubmitted(profile);
 
     return CreativeAssetMapper.toResponse(asset);
   }
@@ -164,8 +165,9 @@ export class CreativeAssetCommandService {
       organizationName: asset.campaign.organization.name,
       fileUrl: '',
     };
+    console.log('Asset Notification Email Approve:', profile);
 
-    await this.assetNotificationService.notifyAssetDecision(profile);
+    //await this.assetNotificationService.notifyAssetDecision(profile);
 
     return CreativeAssetMapper.toResponse(asset);
   }
@@ -192,8 +194,9 @@ export class CreativeAssetCommandService {
       organizationName: asset.campaign.organization.name,
       fileUrl: '',
     };
+    console.log('Asset Notification Email Reject:', profile);
 
-    await this.assetNotificationService.notifyAssetDecision(profile);
+    //await this.assetNotificationService.notifyAssetDecision(profile);
 
     return CreativeAssetMapper.toResponse(asset);
   }

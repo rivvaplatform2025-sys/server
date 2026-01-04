@@ -61,7 +61,7 @@ export class CampaignAssignmentService {
     await this.assignmentRepo.save(assignments);
 
     // 🔔 Notify
-    await this.notificationService.notifyAssignment(assignments);
+    //await this.notificationService.notifyAssignment(assignments);
   }
 
   async respondToAssignment(
