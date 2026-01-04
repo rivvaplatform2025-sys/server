@@ -19,6 +19,11 @@ export class UpdateProfileRequestDto {
 
   @ApiProperty()
   @IsOptional()
+  @IsString()
+  bio?: string;
+
+  @ApiProperty()
+  @IsOptional()
   @IsUrl()
   avatarUrl?: string;
 }
