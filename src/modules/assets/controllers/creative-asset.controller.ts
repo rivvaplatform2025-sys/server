@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { CreativeAssetCommandService } from '../services/creative-asset-command.service';
 import { CreativeAssetQueryService } from '../services/creative-asset-query.service';
@@ -23,6 +23,7 @@ import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 
 @ApiTags('Creative Assets')
+@ApiBearerAuth('access-token')
 @Controller({ path: 'creative-assets', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class CreativeAssetController {

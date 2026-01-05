@@ -121,9 +121,9 @@ export class AuthController {
     return { success: true };
   }
 
+  @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user' })
   me(@CurrentUser() user: IAuthenticatedRequest) {
     return user;

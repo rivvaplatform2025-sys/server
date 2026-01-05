@@ -31,6 +31,10 @@ import { CampaignModule } from './modules/campaign/campaign.module';
 import { PlatformModule } from './modules/platform/platform.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { AssetModule } from './modules/assets/asset.module';
+import { Conversation } from './modules/inbox/domain/entities/conversation.entity';
+import { ConversationParticipant } from './modules/inbox/domain/entities/conversation-participant.entity';
+import { Message } from './modules/inbox/domain/entities/message.entity';
+import { InboxModule } from './modules/inbox/inbox.module';
 
 @Module({
   imports: [
@@ -67,6 +71,9 @@ import { AssetModule } from './modules/assets/asset.module';
             OrganizationInvitation,
             NotificationType,
             NotificationTemplate,
+            Conversation,
+            ConversationParticipant,
+            Message,
           ],
 
           extra: {
@@ -77,9 +84,10 @@ import { AssetModule } from './modules/assets/asset.module';
       },
     }),
     AuthModule,
-    NewsletterModule,
+    InboxModule,
     CampaignModule,
     AssetModule,
+    NewsletterModule,
     PlatformModule,
     NotificationModule,
   ],

@@ -19,6 +19,9 @@ import { CampaignAssignment } from 'src/modules/campaign/domain/entities/campaig
 import { CreativeAsset } from 'src/modules/assets/domain/entities/creative-assets.entity';
 import { CampaignComment } from 'src/modules/campaign/domain/entities/campaign-comment.entity';
 import { OrganizationInvitation } from 'src/modules/organization/domain/entities/invitation.entity';
+import { Conversation } from 'src/modules/inbox/domain/entities/conversation.entity';
+import { ConversationParticipant } from 'src/modules/inbox/domain/entities/conversation-participant.entity';
+import { Message } from 'src/modules/inbox/domain/entities/message.entity';
 
 config();
 
@@ -47,6 +50,9 @@ const dataSource = new DataSource({
     CreativeAsset,
     CampaignComment,
     OrganizationInvitation,
+    Conversation,
+    ConversationParticipant,
+    Message,
   ],
   migrations: ['src/database/migrations/*.ts'],
 });

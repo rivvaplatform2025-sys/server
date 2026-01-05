@@ -20,13 +20,14 @@ import {
   UpdateCampaignDto,
 } from '../application/dto/campaign-command.dto';
 import { CurrentOrganization } from 'src/modules/auth/decorators/current-organization.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ChangeCampaignStatusDto } from '../application/dto/change-campaign-status.dto';
 import { CampaignFilterDto } from '../application/dto/campaign-filter.dto';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { CampaignQueryService } from '../services/campaign-query.service';
 
 @ApiTags('Campaign')
+@ApiBearerAuth('access-token')
 @Controller({ path: 'campaigns/manager', version: '1' })
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('Brand Manager')
