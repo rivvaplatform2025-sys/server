@@ -21,6 +21,13 @@ export class OrganizationRequestDto {
   @Length(7, 14)
   companyPhoneNumber?: string;
 
+  @ApiProperty({
+    example: '22, ABCDEF street allocation road, lagos, Nigeria.',
+  })
+  @IsNotEmpty()
+  @Length(7, 14)
+  address?: string;
+
   @ApiProperty({ example: 'https://abcdeltd.com' })
   @IsNotEmpty()
   companyWebsite?: string;

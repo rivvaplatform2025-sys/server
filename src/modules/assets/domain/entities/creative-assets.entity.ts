@@ -1,3 +1,4 @@
+// src/modules/assets/domain/entities/creative-assets.entity.ts
 import { Campaign } from 'src/modules/campaign/domain/entities/campaign.entity';
 import { User } from 'src/modules/users/domain/entities/user.entity';
 import {

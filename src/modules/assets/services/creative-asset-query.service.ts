@@ -1,3 +1,4 @@
+// src/modules/assets/services/creative-assets-query.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreativeAsset } from '../domain/entities/creative-assets.entity';
@@ -23,33 +24,32 @@ export class CreativeAssetQueryService {
     const page = pagination.getPage();
     const limit = pagination.getLimit();
 
-    console.log('Creative Asset Query Service: ', organizationId);
-
     const qb = this.assetRepo
-      .createQueryBuilder('assets')
-      .leftJoinAndSelect('assets.campaign', 'campaign')
-      .leftJoinAndSelect('assets.createdby', 'createdby')
-      .where('assets.organizationId = :organizationId', {
-        organizationId: organizationId,
+      .createQueryBuilder('asset')
+      .leftJoinAndSelect('asset.campaign', 'campaign')
+      .leftJoinAndSelect('campaign.organization', 'organization')
+      .leftJoinAndSelect('asset.createdBy', 'createdBy')
+      .where('organization.id = :organizationId', {
+        organizationId,
       });
 
     // 🔎 Search
     if (filters.search) {
       qb.andWhere(
-        '(assets.title ILIKE :search OR assets.description ILIKE :search)',
+        '(asset.title ILIKE :search OR asset.description ILIKE :search)',
         { search: `%${filters.search}%` },
       );
     }
 
     // 🎯 Status filter
     if (filters.status) {
-      qb.andWhere('assets.status = :status', {
+      qb.andWhere('asset.status = :status', {
         status: filters.status,
       });
     }
 
     // 📊 Pagination
-    qb.orderBy('assets.createdAt', 'DESC')
+    qb.orderBy('asset.createdAt', 'DESC')
       .skip((page - 1) * limit)
       .take(limit);
 
