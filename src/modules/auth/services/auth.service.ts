@@ -74,6 +74,7 @@ export class AuthService {
         where: { email },
         relations: ['organization'],
       });
+      console.log(user_profile);
       if (!user_profile) {
         throw new NotFoundException(
           'Email address for this user does not exist',
@@ -142,6 +143,8 @@ export class AuthService {
   ): Promise<User> {
     const existing = await this.userRepo.findOne({ where: { email } });
     if (existing) throw new BadRequestException('Email already in use');
+
+    console.log();
 
     const role = await this.roleRepo.findOne({
       where: { id: roleId },
