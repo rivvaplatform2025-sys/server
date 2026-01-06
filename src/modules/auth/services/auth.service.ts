@@ -74,7 +74,6 @@ export class AuthService {
         where: { email },
         relations: ['organization'],
       });
-      console.log(user_profile);
       if (!user_profile) {
         throw new NotFoundException(
           'Email address for this user does not exist',
@@ -102,6 +101,7 @@ export class AuthService {
         email: request.companyEmail,
         phoneNumber: request.companyPhoneNumber,
         website: request.companyWebsite,
+        address: request.address,
         slug: slug_name,
         owner: user_profile,
       });
@@ -124,6 +124,8 @@ export class AuthService {
         id: savedOrganization.id,
         companyName: savedOrganization.name,
         UserEmail: email,
+        companyWebsite: savedOrganization.website,
+        address: savedOrganization.address,
         createdAt: savedOrganization.createdAt,
       };
       return response;

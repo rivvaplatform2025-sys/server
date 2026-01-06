@@ -40,5 +40,11 @@ export class OrganizationResponseDto {
   UserEmail: string;
 
   @ApiProperty()
+  address?: string;
+
+  @IsOptional()
+  companyWebsite?: string;
+
+  @ApiProperty()
   createdAt: Date;
 }
