@@ -42,7 +42,7 @@ export class OrganizationResponseDto {
   @ApiProperty()
   address?: string;
 
-  @IsOptional()
+  @ApiProperty()
   companyWebsite?: string;
 
   @ApiProperty()

@@ -50,6 +50,14 @@ export class CampaignManagerController {
     );
   }
 
+  @Get(':id')
+  findOne(
+    @Param('id') campaignId: string,
+    @CurrentOrganization() organizationId: string,
+  ) {
+    return this.queryService.findOneByOrganization(campaignId, organizationId);
+  }
+
   @Post()
   create(
     @CurrentUser() user: User,

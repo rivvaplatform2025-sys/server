@@ -33,6 +33,19 @@ export class CampaignMapper {
         companyName: campaign.organization.name,
         email: campaign.organization.email,
       },
+      assignments: campaign.assignments?.map((a) => ({
+        id: a.id,
+        role: a.role,
+        status: a.status,
+        createdAt: a.createdAt,
+        user: {
+          id: a.user.id,
+          email: a.user.email,
+          firstName: a.user.firstName,
+          lastName: a.user.lastName,
+          avatarUrl: a.user.avatarUrl,
+        },
+      })),
     };
   }
 }

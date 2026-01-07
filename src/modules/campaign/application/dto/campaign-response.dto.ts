@@ -4,6 +4,7 @@ import { CampaignStatus } from '../../domain/enums/campaign-status.enum';
 import { CampaignBudget } from './campaign-command.dto';
 import { InvitationOrganizationDto } from 'src/modules/organization/application/dto/invitation-response.dto';
 import { PlatformResponseDto } from 'src/modules/platform/application/dto/platform-response.dto';
+import { CampaignAssignmentResponseDto } from './campaign-assignment.response.dto';
 
 export class CampaignManagerDto {
   @ApiProperty()
@@ -65,4 +66,10 @@ export class CampaignResponseDto {
 
   @ApiProperty({ type: CampaignOrganizationDto, required: false })
   organization?: CampaignOrganizationDto;
+
+  @ApiProperty({
+    type: [CampaignAssignmentResponseDto],
+    required: false,
+  })
+  assignments?: CampaignAssignmentResponseDto[];
 }

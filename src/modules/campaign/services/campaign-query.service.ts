@@ -1,6 +1,6 @@
 // src/modules/campaign/services/campaign-query.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Campaign } from '../domain/entities/campaign.entity';
@@ -24,8 +24,6 @@ export class CampaignQueryService {
   ): Promise<PaginatedResponseDto<CampaignResponseDto>> {
     const page = pagination.getPage();
     const limit = pagination.getLimit();
-
-    console.log('Campaign Query Service: ', organizationId);
 
     const qb = this.campaignRepo
       .createQueryBuilder('campaign')
@@ -90,5 +88,26 @@ export class CampaignQueryService {
         },
       },
     };
+  }
+  async findOneByOrganization(
+    campaignId: string,
+    organizationId: string,
+  ): Promise<CampaignResponseDto> {
+    const campaign = await this.campaignRepo
+      .createQueryBuilder('campaign')
+      .leftJoinAndSelect('campaign.manager', 'manager')
+      .leftJoinAndSelect('campaign.platforms', 'platforms')
+      .leftJoinAndSelect('campaign.organization', 'organization')
+      .leftJoinAndSelect('campaign.assignments', 'assignments')
+      .leftJoinAndSelect('assignments.user', 'assignedUser')
+      .where('campaign.id = :campaignId', { campaignId })
+      .andWhere('organization.id = :organizationId', { organizationId })
+      .getOne();
+
+    if (!campaign) {
+      throw new NotFoundException('Campaign not found');
+    }
+
+    return CampaignMapper.toResponse(campaign);
   }
 }
