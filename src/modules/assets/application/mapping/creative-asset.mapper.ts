@@ -16,7 +16,6 @@ export class CreativeAssetMapper {
         firstName: asset.createdBy.firstName,
         lastName: asset.createdBy.lastName,
         phone: asset.createdBy.phone,
-        role: asset.createdBy.userRoles[0].role.name,
       },
       campaign: asset.campaign && {
         campaignTitle: asset.campaign.title,

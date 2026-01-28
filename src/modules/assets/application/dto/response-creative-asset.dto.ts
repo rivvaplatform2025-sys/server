@@ -36,9 +36,6 @@ export class UserCreatorDto {
 
   @ApiProperty()
   phone?: string;
-
-  @ApiProperty()
-  role: string;
 }
 
 export class CreativeAssetResponseDto {

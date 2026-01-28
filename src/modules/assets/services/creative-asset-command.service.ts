@@ -73,7 +73,7 @@ export class CreativeAssetCommandService {
     if (!campaignProfile)
       throw new NotFoundException('Campaign not found for this organization');
 
-    await this.ensureUserAssignedToCampaign(dto.campaignId, createdById);
+    // await this.ensureUserAssignedToCampaign(dto.campaignId, createdById);
 
     // 4. Create campaign
     const asset = this.assetRepo.create({
@@ -86,6 +86,8 @@ export class CreativeAssetCommandService {
       campaign: campaignProfile,
     });
     await this.assetRepo.save(asset);
+
+    console.log(asset);
 
     return CreativeAssetMapper.toResponse(asset);
   }
