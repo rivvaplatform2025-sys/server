@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { CreativeAssetCommandService } from '../services/creative-asset-command.service';
 import { CreativeAssetQueryService } from '../services/creative-asset-query.service';
@@ -21,6 +21,8 @@ import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { UpdateCreativeAssetDto } from '../application/dto/update-creative-asset.dto';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
+import { CreativeAssetStatsResponseDto } from '../analytics/dto/campaign-asset-stats.response.dto';
+import { AssetAnalyticsService } from '../analytics/asset-analytics.service';
 
 @ApiTags('Creative Assets')
 @ApiBearerAuth('access-token')
@@ -30,7 +32,18 @@ export class CreativeAssetController {
   constructor(
     private readonly commandService: CreativeAssetCommandService,
     private readonly queryService: CreativeAssetQueryService,
+    private readonly analyticsService: AssetAnalyticsService,
   ) {}
+
+  @Get('analytics')
+  @ApiOperation({ summary: 'Get campaign asset statistics' })
+  @Roles('Admin', 'Brand Manager')
+  @UseGuards(RolesGuard)
+  async getStats(
+    @CurrentOrganization() organizationId: string,
+  ): Promise<CreativeAssetStatsResponseDto> {
+    return this.analyticsService.getCampaignAssetStats(organizationId);
+  }
 
   @Get()
   findAll(
@@ -65,14 +78,14 @@ export class CreativeAssetController {
   }
 
   @Post(':id/approve')
-  @Roles('Admin', 'Business Manager')
+  @Roles('Admin', 'Brand Manager')
   @UseGuards(RolesGuard)
   approve(@Param('id') assetId: string) {
     return this.commandService.approve(assetId);
   }
 
   @Post(':id/reject')
-  @Roles('Admin', 'Business Manager')
+  @Roles('Admin', 'Brand Manager')
   @UseGuards(RolesGuard)
   reject(@Param('id') assetId: string) {
     return this.commandService.reject(assetId);

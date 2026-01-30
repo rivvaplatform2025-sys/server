@@ -11,6 +11,7 @@ import { MailerModule } from 'src/shared/mailer/mailer.module';
 import { CreativeAssetNotificationService } from '../notification/services/creative-asset-notification.service';
 import { Organization } from '../organization/domain/entities/organization.entity';
 import { CampaignAssignment } from '../campaign/domain/entities/campaign-assignment.entity';
+import { AssetAnalyticsService } from './analytics/asset-analytics.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CampaignAssignment } from '../campaign/domain/entities/campaign-assignm
     CreativeAssetCommandService,
     CreativeAssetQueryService,
     CreativeAssetNotificationService,
+    AssetAnalyticsService,
   ],
   exports: [TypeOrmModule],
 })

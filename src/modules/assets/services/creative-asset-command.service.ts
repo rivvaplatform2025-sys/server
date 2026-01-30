@@ -87,8 +87,6 @@ export class CreativeAssetCommandService {
     });
     await this.assetRepo.save(asset);
 
-    console.log(asset);
-
     return CreativeAssetMapper.toResponse(asset);
   }
 
